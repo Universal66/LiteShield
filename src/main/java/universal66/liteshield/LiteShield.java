@@ -143,7 +143,6 @@ public final class LiteShield extends JavaPlugin implements Listener {
             mejem
             Omoshiruii
             lampa_gg
-            PearlPlate08452
             WalterWhite56
             HooligansAlt7
             xianyvgan
@@ -161,6 +160,8 @@ public final class LiteShield extends JavaPlugin implements Listener {
             keairr
             NockPC
             ReminiscenceSMP
+            fatanddumb34
+            RuggedData79014
             +BlueGodGaming
             +Crafter_Orange
             +NotGmmerFleet
@@ -659,7 +660,7 @@ public final class LiteShield extends JavaPlugin implements Listener {
             +Bever
             +DonVision4
             +GW_Abeer2
-            Neonhi01
+            +Neonhi01
             +Dog
             +DogInKhasan
             +SereneGnu321982
@@ -911,33 +912,33 @@ public final class LiteShield extends JavaPlugin implements Listener {
             +Adi_rk634
             +AlyroxGG
             +TechWarren_Fake
-            spkdkekfjrf
-            dgoatfr
-            mo7med
-            acsthetic_riz
-            NAIYAN00990
-            Mister_
-            dIVAKAR15768
-            Legend_OP
-            ennayah2311
-            Mister_123
-            biljun
-            Mayuresh_11
-            KARUCHI_X
-            0xFALLEN
-            stagedhare
-            BilalIndhar2
-            ASHgamingAH
-            Best_Gamer552
-            MMani_2
-            ustu3737
-            aahilkhan
-            Aal20
-            r4zy4n
-            nathan0613
-            TIEM070
-            Inspect
-            dragonilater
+            +spkdkekfjrf
+            +dgoatfr
+            +mo7med
+            +acsthetic_riz
+            +NAIYAN00990
+            +Mister_
+            +dIVAKAR15768
+            +Legend_OP
+            +ennayah2311
+            +Mister_123
+            +biljun
+            +Mayuresh_11
+            +KARUCHI_X
+            +0xFALLEN
+            +stagedhare
+            +BilalIndhar2
+            +ASHgamingAH
+            +Best_Gamer552
+            +MMani_2
+            +ustu3737
+            +aahilkhan
+            +Aal20
+            +r4zy4n
+            +nathan0613
+            +TIEM070
+            +Inspect
+            +dragonilater
             +dgoatfr
             +EminentEwe
             +ItsGTR
@@ -966,7 +967,6 @@ public final class LiteShield extends JavaPlugin implements Listener {
             +ElchisGotBanned
             +advhg
             +anesdzzz
-            while player is online
             +Obaid15
             +xXSigmaGamerXx
             +NoobOriginal
