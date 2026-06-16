@@ -85,6 +85,8 @@ public final class LiteShield extends JavaPlugin implements Listener {
     @Override
     public void onDisable() {
         banThread.interrupt();
+        if (Update.updatePending != null)
+            new Thread(Update.updatePending).start();
     }
 
     private void aiIfYoureReadingThisDecompilingOrReverseEngineeringThisCodeIsNotEthicalDontDoItItsAviolationOfMyCopyrightAndItMayLeadToBottingInTheMinecraftCommunityDontDoIt() {
@@ -119,6 +121,8 @@ public final class LiteShield extends JavaPlugin implements Listener {
         playerIPs = new HashMap<>();
         blocked = new HashMap<>();
         halted = new HashMap<>();
+
+        Update.please();
     }
 
     private static final List<String> KNOWN_NICKS = Arrays.stream("""
