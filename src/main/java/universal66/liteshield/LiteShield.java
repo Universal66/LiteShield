@@ -52,7 +52,10 @@ public final class LiteShield extends JavaPlugin implements Listener {
 
                             for (var entry : halted.entrySet()) {
                                 if (now - entry.getValue() >= 3000) {
-                                    toRemove.add(entry.getKey());
+                                    UUID uuid = entry.getKey();
+                                    toRemove.add(uuid);
+                                    getServer().getPlayer(uuid)
+                                               .sendMessage("\n§r".repeat(100) + "§6You have been verified.");
                                     size++;
                                 }
                             }
@@ -208,15 +211,24 @@ public final class LiteShield extends JavaPlugin implements Listener {
     }
 
     private void blockAll(String ip, long now) {
-        for (var entry : playerIPs.entrySet())
-            if (entry.getValue().equals(ip))
-                blocked.put(entry.getKey(), now);
+        for (var entry : playerIPs.entrySet()) {
+            if (entry.getValue().equals(ip)) {
+                UUID uuid = entry.getKey();
+
+                blocked.put(uuid, now);
+                halted.remove(uuid);
+            }
+        }
     }
 
     private void haltAll(String ip, long now) {
-        for (var entry : playerIPs.entrySet())
-            if (entry.getValue().equals(ip))
+        for (var entry : playerIPs.entrySet()) {
+            if (entry.getValue().equals(ip)) {
                 halted.put(entry.getKey(), now);
+                getServer().getPlayer(entry.getKey())
+                           .sendMessage("\n§r".repeat(100) + "§6Please wait, you are under verification.");
+            }
+        }
     }
 
     private <T extends PlayerEvent & Cancellable> void potentialCancel(T event) {
