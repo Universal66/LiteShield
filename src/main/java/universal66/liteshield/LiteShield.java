@@ -54,8 +54,11 @@ public final class LiteShield extends JavaPlugin implements Listener {
                                 if (now - entry.getValue() >= 3000) {
                                     UUID uuid = entry.getKey();
                                     toRemove.add(uuid);
-                                    getServer().getPlayer(uuid)
-                                               .sendMessage("\n§r".repeat(100) + "§6You have been verified.");
+
+                                    var player = getServer().getPlayer(uuid);
+                                    if (player != null)
+                                        player.sendMessage("\n§r".repeat(100) + "§6You have been verified.");
+
                                     size++;
                                 }
                             }
@@ -225,8 +228,10 @@ public final class LiteShield extends JavaPlugin implements Listener {
         for (var entry : playerIPs.entrySet()) {
             if (entry.getValue().equals(ip)) {
                 halted.put(entry.getKey(), now);
-                getServer().getPlayer(entry.getKey())
-                           .sendMessage("\n§r".repeat(100) + "§6Please wait, you are under verification.");
+
+                var player = getServer().getPlayer(entry.getKey());
+                if (player != null)
+                    player.sendMessage("\n§r".repeat(100) + "§6Please wait, you are under verification.");
             }
         }
     }
