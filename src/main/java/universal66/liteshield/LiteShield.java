@@ -1,10 +1,12 @@
 package universal66.liteshield;
 
 import org.bukkit.Bukkit;
+import org.bukkit.entity.Player;
 import org.bukkit.event.Cancellable;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.EventPriority;
 import org.bukkit.event.Listener;
+import org.bukkit.event.entity.EntityDamageEvent;
 import org.bukkit.event.player.*;
 import org.bukkit.plugin.java.JavaPlugin;
 
@@ -237,10 +239,13 @@ public final class LiteShield extends JavaPlugin implements Listener {
     }
 
     private <T extends PlayerEvent & Cancellable> void potentialCancel(T event) {
-        if (blocked.containsKey(event.getPlayer().getUniqueId()) ||
-            halted.containsKey(event.getPlayer().getUniqueId())
-        )
+        if (restricted(event.getPlayer()))
             event.setCancelled(true);
+    }
+
+    private boolean restricted(Player player) {
+        return blocked.containsKey(player.getUniqueId()) ||
+                halted.containsKey(player.getUniqueId());
     }
 
     @EventHandler(priority = EventPriority.LOWEST, ignoreCancelled = true)
@@ -261,5 +266,13 @@ public final class LiteShield extends JavaPlugin implements Listener {
     @EventHandler
     public void onPlayerInteract(PlayerInteractEntityEvent event) {
         potentialCancel(event);
+    }
+
+    @EventHandler
+    public void onEntityDamage(EntityDamageEvent event) {
+        if (event.getDamageSource().getDirectEntity() instanceof Player player && restricted(player))
+            event.setCancelled(true);
+        else if (event.getEntity() instanceof Player player && restricted(player))
+            event.setCancelled(true);
     }
 }
