@@ -1,0 +1,9 @@
+name: LiteShield
+description: $description
+version: '${version}'
+
+main: universal66.liteshield.LiteShield
+api-version: '1.21'
+load: STARTUP
+
+authors: [ Universal66 ]
