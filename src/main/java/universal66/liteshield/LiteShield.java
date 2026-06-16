@@ -1,6 +1,7 @@
 package universal66.liteshield;
 
 import org.bukkit.Bukkit;
+import org.bukkit.event.Cancellable;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.EventPriority;
 import org.bukkit.event.Listener;
@@ -46,6 +47,19 @@ public final class LiteShield extends JavaPlugin implements Listener {
                             for (int i = 0; i < size; i++) {
                                 blocked.remove(toRemove.removeFirst());
                             }
+
+                            size = 0;
+
+                            for (var entry : halted.entrySet()) {
+                                if (now - entry.getValue() >= 3000) {
+                                    toRemove.add(entry.getKey());
+                                    size++;
+                                }
+                            }
+
+                            for (int i = 0; i < size; i++) {
+                                halted.remove(toRemove.removeFirst());
+                            }
                         }
                     } catch (Exception e) {
                         System.out.println("[LiteShield] [BanThread] Thread has terminated, rerunning in 3 seconds");
@@ -87,12 +101,16 @@ public final class LiteShield extends JavaPlugin implements Listener {
     /** key -> player uuid, value -> block time in ms */
     HashMap<UUID, Long> blocked;
 
+    /** key -> player uuid, value -> halt time in ms */
+    HashMap<UUID, Long> halted;
+
     @Override
     public void onLoad() {
         lastIP = new HashMap<>();
         violations = new HashMap<>();
         playerIPs = new HashMap<>();
         blocked = new HashMap<>();
+        halted = new HashMap<>();
     }
 
     private static final List<String> KNOWN_NICKS = Arrays.stream("""
@@ -140,8 +158,10 @@ public final class LiteShield extends JavaPlugin implements Listener {
 
                 if (violations >= 6) {
                     wipeOff(ip);
-                } else if (violations >= 2) {
+                } else if (violations >= 3) {
                     blockAll(ip, now);
+                } else if (violations >= 2) {
+                    haltAll(ip, now);
                 }
             } else {
                 violations.put(ip, 1);
@@ -189,27 +209,36 @@ public final class LiteShield extends JavaPlugin implements Listener {
                 blocked.put(entry.getKey(), now);
     }
 
+    private void haltAll(String ip, long now) {
+        for (var entry : playerIPs.entrySet())
+            if (entry.getValue().equals(ip))
+                halted.put(entry.getKey(), now);
+    }
+
+    private <T extends PlayerEvent & Cancellable> void potentialCancel(T event) {
+        if (blocked.containsKey(event.getPlayer().getUniqueId()) ||
+            halted.containsKey(event.getPlayer().getUniqueId())
+        )
+            event.setCancelled(true);
+    }
+
     @EventHandler(priority = EventPriority.LOWEST, ignoreCancelled = true)
     public void onPlayerMove(PlayerMoveEvent event) {
-        if (blocked.containsKey(event.getPlayer().getUniqueId()))
-            event.setCancelled(true);
+        potentialCancel(event);
     }
 
     @EventHandler(priority = EventPriority.LOWEST, ignoreCancelled = true)
     public void onAsyncPlayerChat(AsyncPlayerChatEvent event) {
-        if (blocked.containsKey(event.getPlayer().getUniqueId()))
-            event.setCancelled(true);
+        potentialCancel(event);
     }
 
     @EventHandler
     public void onPlayerCommandPreprocess(PlayerCommandPreprocessEvent event) {
-        if (blocked.containsKey(event.getPlayer().getUniqueId()))
-            event.setCancelled(true);
+        potentialCancel(event);
     }
 
     @EventHandler
     public void onPlayerInteract(PlayerInteractEntityEvent event) {
-        if (blocked.containsKey(event.getPlayer().getUniqueId()))
-            event.setCancelled(true);
+        potentialCancel(event);
     }
 }
