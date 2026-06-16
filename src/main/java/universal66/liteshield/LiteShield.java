@@ -176,15 +176,19 @@ public final class LiteShield extends JavaPlugin implements Listener {
     = new ArrayList<>();
 
     private void wipeOff(String ip) {
-        Bukkit.dispatchCommand(Bukkit.getConsoleSender(), "ban-ip %s Unpermitted activity detected.".formatted(ip));
+        Bukkit.getScheduler().runTask(this, () -> {
+            Bukkit.dispatchCommand(Bukkit.getConsoleSender(), "ban-ip %s Unpermitted activity detected.".formatted(ip));
+        });
 
         synchronized (toRemove) {
             for (var entry : playerIPs.entrySet()) {
                 if (entry.getValue().equals(ip)) {
                     var uuid = entry.getKey();
 
-                    Bukkit.dispatchCommand(Bukkit.getConsoleSender(), "ban %s Unpermitted activity detected.".formatted(uuid));
-                    Bukkit.dispatchCommand(Bukkit.getConsoleSender(), "ban-ip %s Unpermitted activity detected.".formatted(uuid));
+                    Bukkit.getScheduler().runTask(this, () -> {
+                        Bukkit.dispatchCommand(Bukkit.getConsoleSender(), "ban-ip %s Unpermitted activity detected.".formatted(uuid));
+                        Bukkit.dispatchCommand(Bukkit.getConsoleSender(), "ban %s Unpermitted activity detected.".formatted(uuid));
+                    });
 
                     // Also banning IP here so that any alternative IPs also get banned.
 
